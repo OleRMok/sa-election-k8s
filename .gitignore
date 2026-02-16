@@ -1,0 +1,39 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+
+# AWS / Cloud Provider keys
+.aws/
+credentials
+*.pem
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+secrets.yaml
+
+# Node / Dependencies
+node_modules/
+dist/
+build/
+.npm
+.eslintcache
+
+# Python (for any Python scripts or tools used in this project)
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# OS / IDE specific
+.DS_Store
+.vscode/
+.idea/
+*.swp

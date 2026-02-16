@@ -1,0 +1,17 @@
+services:
+  backend:
+    build:
+      context: ./apps/backend
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SECRET_SALT=${SECRET_SALT:-default_local_salt}
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"

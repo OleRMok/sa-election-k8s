@@ -12,27 +12,32 @@ from dotenv import load_dotenv
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sa-voting-api")
 
-# 2. ENVIRONMENT & PATHS
-# Look for the .env at the project root (4 levels up from this file locally)
-# In Docker, this file won't exist, so we use load_dotenv's fail-safe behaviour
-BASE_DIR = Path(__file__).resolve().parents[3]
-env_path = BASE_DIR / ".env"
+# 2. ENVIRONMENT & PATHS (DOCKER-FRIENDLY)
+# Use a try-except block to handle different directory depths safely
+try:
+    # Local Dev: .env is 3 levels up from apps/backend/app/
+    BASE_DIR = Path(__file__).resolve().parents[3]
+    env_path = BASE_DIR / ".env"
+except IndexError:
+    # Inside Docker: Root is only 2 levels up, parents[3] doesn't exist
+    env_path = None
 
-if env_path.exists():
+if env_path and env_path.exists():
     load_dotenv(dotenv_path=env_path)
-    logger.info(f"Loaded config from {env_path}")
+    logger.info(f" Loaded config from {env_path}")
 else:
-    load_dotenv() # Fallback to system environment variables (Docker/K8s)
-    logger.info("No .env file found; using system environment variables.")
+    # Fallback for Docker/Kubernetes (Environment Variables will be injected)
+    load_dotenv() 
+    logger.info(" Using system environment variables (Container Mode)")
 
 app = FastAPI(title="SA Voting API")
 
-# 3. CONFIGURATION (with defaults)
+# 3. CONFIGURATION
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 SALT = os.getenv("SECRET_SALT", "default_unsalt_change_me_in_prod")
 
-# Setup Redis connection pool (better for microservices)
+# Setup Redis connection pool
 pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 r = redis.Redis(connection_pool=pool)
 
@@ -58,12 +63,11 @@ def is_valid_sa_id(id_num: str) -> bool:
 # 5. ROUTES
 @app.post("/vote")
 async def cast_vote(vote: Vote):
-    # Validation
     if not is_valid_sa_id(vote.id_number):
         logger.warning(f"Invalid ID attempt: {vote.id_number}")
         raise HTTPException(status_code=400, detail="Invalid SA ID")
     
-    # Hashing (Privacy/POPIA Compliance)
+    # Hashing for POPIA Compliance
     voter_hash = hashlib.sha256((vote.id_number + SALT).encode()).hexdigest()
     
     # Deduplication check
@@ -71,7 +75,7 @@ async def cast_vote(vote: Vote):
         logger.info("Duplicate vote attempted.")
         raise HTTPException(status_code=403, detail="This ID has already voted")
     
-    # Record Vote (Atomic operations)
+    # Record Vote
     try:
         r.set(f"voter:{voter_hash}", "1")
         r.incr(f"party:{vote.candidate}")

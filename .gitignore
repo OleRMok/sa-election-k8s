@@ -37,3 +37,17 @@ venv/
 .vscode/
 .idea/
 *.swp
+
+# Secrets
+.env
+.env.local
+*.pem
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+
+# Build artifacts
+dist/
+build/

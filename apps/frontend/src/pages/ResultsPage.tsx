@@ -20,13 +20,13 @@ interface ResultEntry {
 }
 
 const fetchResults = async (): Promise<ResultEntry[]> => {
-  const res = await fetch("http://localhost:8000/results");
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/results`);
   if (!res.ok) throw new Error("Failed to fetch results");
   const data = await res.json();
 
-  // Normalize: expect { national_party: { partyName: count } } or array
-  if (data.national_party && typeof data.national_party === "object") {
-    return Object.entries(data.national_party).map(([party, votes]) => ({
+  // Normalize: expect { national_tally: { partyName: count } } or array
+  if (data.national_tally && typeof data.national_tally === "object") {
+    return Object.entries(data.national_tally).map(([party, votes]) => ({
       party,
       votes: votes as number,
     }));

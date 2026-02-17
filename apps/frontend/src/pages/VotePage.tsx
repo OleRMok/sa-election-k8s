@@ -40,6 +40,8 @@ const VotePage = () => {
   const [regionalCandidate, setRegionalCandidate] = useState("");
   const [provincialCandidate, setProvincialCandidate] = useState("");
 
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
   const handleIdChange = (val: string) => {
     const digits = val.replace(/\D/g, "").slice(0, 13);
     setIdNumber(digits);
@@ -68,13 +70,23 @@ const VotePage = () => {
       setIdError("Please enter a valid 13-digit South African ID number.");
       return;
     }
-    if (step < STEPS.length - 1) setStep(step + 1);
+    if (step < STEPS.length - 1) {
+      setStep(step + 1);
+      scrollToTop();
+    }
+  };
+
+  const handleBack = () => {
+    if (step > 0) {
+      setStep(step - 1);
+      scrollToTop();
+    }
   };
 
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      const res = await fetch("http://localhost:8000/vote", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -276,7 +288,7 @@ const VotePage = () => {
       <div className="flex justify-between mt-6">
         <Button
           variant="outline"
-          onClick={() => setStep(step - 1)}
+          onClick={handleBack}
           disabled={step === 0}
           className="gap-1"
         >

@@ -9,6 +9,7 @@ export const PROVINCES = [
   "Northern Cape",
   "Western Cape",
 ] as const;
+
 export type Province = (typeof PROVINCES)[number];
 
 export const MUNICIPALITIES: Record<Province, string[]> = {
@@ -21,18 +22,6 @@ export const MUNICIPALITIES: Record<Province, string[]> = {
   "North West": ["Bojanala Platinum", "Dr Kenneth Kaunda", "Ngaka Modiri Molema", "Dr Ruth Segomotsi Mompati"],
   "Northern Cape": ["Frances Baard", "John Taolo Gaetsewe", "Namakwa", "Pixley ka Seme", "ZF Mgcawu"],
   "Western Cape": ["City of Cape Town", "Cape Winelands", "Garden Route", "Overberg", "West Coast", "Central Karoo"],
-};
-
-export const PARTY_LOGOS: Record<string, string> = {
-  "African National Congress (ANC)": "/logos/anc.png",
-  "Democratic Alliance (DA)": "/logos/da.webp",
-  "Economic Freedom Fighters (EFF)": "/logos/eff.png",
-  "uMkhonto weSizwe (MK)": "/logos/mk.jpeg",
-  "ActionSA": "/logos/actionsa.png",
-  "Inkatha Freedom Party (IFP)": "/logos/ifp.png",
-  "Freedom Front Plus (FF+)": "/logos/vf.png",
-  "Patriotic Alliance (PA)": "/logos/pa.png",
-  "Independent Candidate": "",
 };
 
 export const NATIONAL_PARTIES = [
@@ -53,7 +42,9 @@ export const REGIONAL_PARTIES = [
 
 export function validateSAID(id: string): boolean {
   if (!/^\d{13}$/.test(id)) return false;
+  
   const digits = id.split("").map(Number);
+  // Luhn algorithm
   let sum = 0;
   for (let i = 0; i < 12; i++) {
     let digit = digits[i];

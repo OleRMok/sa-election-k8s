@@ -121,7 +121,7 @@ const VotePage = () => {
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-display font-bold text-foreground">
-          2024 National &amp; Provincial Elections
+          National &amp; Provincial Elections
         </h1>
         <p className="text-muted-foreground mt-1">Secure Digital Ballot</p>
       </div>

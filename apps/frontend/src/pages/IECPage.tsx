@@ -50,7 +50,7 @@ const IECPage = () => {
             <h2 className="font-display font-bold text-lg">About This Platform</h2>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            This digital voting platform is a secure, POPIA-compliant system for casting your vote in the 2024 National and Provincial Elections. Your identity is protected using one-way cryptographic hashing to prevent duplicate voting while preserving your anonymity.
+            This digital voting platform is a secure, POPIA-compliant system for casting your vote in the National and Provincial Elections. Your identity is protected using one-way cryptographic hashing to prevent duplicate voting while preserving your anonymity.
           </p>
         </div>
       </div>

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: election-config
+  namespace: election
+data:
+  # Backend configuration
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  ALLOWED_ORIGINS: "http://localhost:8080,http://localhost"
+  
+  # Frontend configuration
+  # Must update this before deploying if the frontend will be served from a different URL than localhost:8080
+  VITE_API_URL: "http://localhost:8000"

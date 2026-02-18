@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: election
+  labels:
+    app: redis
+    tier: database
+spec:
+  type: ClusterIP # Redis is only accessed internally by the frontend, so ClusterIP is sufficient
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+    name: redis

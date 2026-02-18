@@ -17,6 +17,7 @@ credentials
 .env.local
 .env.*.local
 secrets.yaml
+k8s/base/secret.yaml
 
 # Node / Dependencies
 node_modules/
@@ -50,4 +51,4 @@ __pycache__/
 
 # Build artifacts
 dist/
-build/
+

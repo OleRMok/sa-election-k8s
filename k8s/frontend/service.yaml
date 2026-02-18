@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: election
+  labels:
+    app: frontend
+    tier: presentation
+  annotations:
+    # AWS Load Balancer Controller annotations (only used on EKS) - For local testing, these annotations will be ignored
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+spec:
+  type: LoadBalancer
+  # On Docker Desktop, LoadBalancer works like NodePort and exposes on localhost
+  # On EKS, this creates a Network Load Balancer
+  selector:
+    app: frontend
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http

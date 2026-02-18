@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: election
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  # On EKS, this will use gp2 EBS volumes by default 
+  # On Docker Desktop, this will use local storage 
+  storageClassName: gp2

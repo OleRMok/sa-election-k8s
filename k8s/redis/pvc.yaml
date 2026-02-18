@@ -11,4 +11,4 @@ spec:
       storage: 5Gi
   # On EKS, this will use gp2 EBS volumes by default 
   # On Docker Desktop, this will use local storage 
-  storageClassName: gp2
+  storageClassName: hostpath

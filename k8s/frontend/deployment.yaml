@@ -19,9 +19,8 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: <AWS_ACCOUNT_ID> # Replace with my ECR image URI
-        # For local testing, use: sa-election-k8s-frontend:latest
-        imagePullPolicy: Always
+        image: sa-election-frontend:v2 # Use the new image tag for the updated frontend
+        imagePullPolicy: IfNotPresent  # Ensure the new image is pulled only if it's not already present on the node
         ports:
         - containerPort: 80
           name: http

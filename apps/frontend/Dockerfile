@@ -1,27 +1,28 @@
-# Stage 1: Build the React application
+# Stage 1: Build (The "Heavy" part)
 FROM node:18-alpine AS build
-WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm install
-
-# Pass VITE_API_URL as a build argument
+# Accept build argument
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
-# Copy the rest of the source code
-COPY . .
+WORKDIR /app
 
-# Build the project
+# Copy dependency files first to leverage Docker cache
+COPY package*.json ./
+RUN npm install
+
+# Copy all source files and build for production
+COPY . .
 RUN npm run build
 
-# Stage 2: Serve the app with Nginx
+# Stage 2: Production (The "Light" part)
 FROM nginx:alpine
-# Copy the custom build from the first stage to Nginx
+
+# Copy the static build files from the build stage to Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose port 80 (standard Nginx practice)
-EXPOSE 80
+# Copy the custom Nginx config for SPA routing
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

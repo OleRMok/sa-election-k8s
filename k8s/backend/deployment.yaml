@@ -19,14 +19,13 @@ spec:
     spec:
       containers:
       - name: backend
-        image: <AWS_ACCOUNT_ID> # Update with my ECR repository URI
-        # For local testing, use: sa-election-k8s-backend:latest
-        imagePullPolicy: Always
+        image: sa-election-backend:v2
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
           name: http
         env:
-        - name: REDIS_HOST # Update with my Redis service name
+        - name: REDIS_HOST
           valueFrom:
             configMapKeyRef:
               name: election-config
@@ -53,11 +52,12 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+        # FIXED: Liveness probe now hits the valid /health endpoint
         livenessProbe:
           httpGet:
-            path: /
+            path: /health  
             port: 8000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 15 # Reduced slightly to catch issues faster
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3

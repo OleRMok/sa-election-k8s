@@ -20,7 +20,7 @@ spec:
       containers:
       - name: frontend
         image: sa-election-frontend:v2 # Use the new image tag for the updated frontend
-        imagePullPolicy: Never #for local testing, change to IfNotPresent or Always for production
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: http

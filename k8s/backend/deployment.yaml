@@ -20,7 +20,7 @@ spec:
       containers:
       - name: backend
         image: sa-election-backend:v2
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Never #for local testing, change to IfNotPresent or Always for production
         ports:
         - containerPort: 8000
           name: http

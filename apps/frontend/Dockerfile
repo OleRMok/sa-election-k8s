@@ -3,7 +3,6 @@ FROM node:18-alpine AS build
 
 # Accept build argument
 ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
 
 WORKDIR /app
 

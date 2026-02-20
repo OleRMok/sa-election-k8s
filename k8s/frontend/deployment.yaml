@@ -20,7 +20,7 @@ spec:
       containers:
       - name: frontend
         image: sa-election-frontend:v2 # Use the new image tag for the updated frontend
-        imagePullPolicy: IfNotPresent  # Ensure the new image is pulled only if it's not already present on the node
+        imagePullPolicy: Never #for local testing, change to IfNotPresent or Always for production
         ports:
         - containerPort: 80
           name: http
